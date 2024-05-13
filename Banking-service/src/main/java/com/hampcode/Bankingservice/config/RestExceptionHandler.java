@@ -1,6 +1,7 @@
 package com.hampcode.Bankingservice.config;
 
 import com.hampcode.Bankingservice.exception.BadRequestException;
+import com.hampcode.Bankingservice.exception.ResourseNotFountException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 @RestControllerAdvice
@@ -31,7 +33,7 @@ public class RestExceptionHandler {
         List<FieldError> fieldErrors = ex.getFieldErrors();
 
         for(FieldError fe : fieldErrors){
-            String message = messageSource.getMessage(fe, locale.getDefault());
+            String message = messageSource.getMessage(fe, Locale.getDefault());
             errors.add(message);
         }
         problemDetail.setProperty("errors", errors);
@@ -40,8 +42,8 @@ public class RestExceptionHandler {
 
     }
 
-    @ExceptionHandler(BadRequestException.class)
-    public ProblemDetail handleResourseNotFoundException(ResourseNotFoundException ex) {
+    @ExceptionHandler(ResourseNotFountException.class)
+    public ProblemDetail handleResourseNotFoundException(ResourseNotFountException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,
                 "El recurso no ha sido encontrado");
 
